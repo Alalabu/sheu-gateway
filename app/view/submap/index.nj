@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta name="format-detection" content="telphone=no, email=no">
+		{{#unless isDev}}
+		<link rel="stylesheet" type="text/css" media="all" href="{{manifest.[vendors.css]}}" />
+		<link rel="stylesheet" type="text/css" media="all" href="{{manifest.[app.css]}}" />
+		{{/unless}}
+		<title>Seneca Map</title>
+	</head>
+
+	<body>
+		<div id="root"></div>
+
+    <div>
+      <ul>
+        {% for item in subservers %}
+        <li>subserver: {{ item }}</li> {# host, port, sname, version, routers #}
+				<li>subserver.host: {{ item.host }}</li>
+				<li>subserver.port: {{ item.port }}</li>
+				<li>subserver.sname: {{ item.sname }}</li>
+				<li>subserver.version: {{ item.version }}</li>
+				<li>subserver.routers: {{ item.routers }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+		{{#if isDev}}
+		<script type='text/javascript' src="/public/static/app.js"></script>
+		{{else}}
+		<script type='text/javascript' src="{{manifest.[runtime.js]}}"></script>
+		<script type='text/javascript' src="{{manifest.[vendors.js]}}"></script>
+		<script type='text/javascript' src="{{manifest.[app.js]}}"></script>
+		{{/if}}
+
+	</body>
+</html>
