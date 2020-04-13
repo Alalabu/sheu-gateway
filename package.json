@@ -41,6 +41,7 @@
     "babel-loader": "^8.0.5",
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-react-css-modules": "^5.2.1",
+    "cross-env": "^7.0.2",
     "css-loader": "^2.1.1",
     "egg-bin": "^4.11.0",
     "egg-ci": "^1.11.0",
@@ -81,7 +82,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-sheu-gateway",
+    "start": "egg-scripts start --env=prod --daemon --title=egg-server-sheu-gateway",
     "stop": "egg-scripts stop --title=egg-server-sheu-gateway",
     "dev": "egg-bin dev --env=local",
     "debug": "egg-bin debug",
@@ -91,7 +92,8 @@
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
     "autod": "autod",
-    "build": "rimraf ./app/public/static && NODE_ENV=production webpack"
+    "build": "rimraf ./app/public/static && cross-env NODE_ENV=production webpack",
+    "build-linux": "rimraf ./app/public/static && NODE_ENV=production webpack"
   },
   "ci": {
     "version": "10"
