@@ -54,6 +54,10 @@ module.exports = appInfo => {
       host: '127.0.0.1',
       port: 50005,
     },
+    users: [
+      { appid: 'Alalabu', appsecret: '002f61118a6045d1ae7c49173805b0cd' },
+      { appid: 'xiaofei', appsecret: '0034211ec4c5420f9171f2724af9e34a' },
+    ],
   };
 
   // 配置静态资源

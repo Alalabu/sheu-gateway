@@ -49,6 +49,7 @@ class ServiceContent extends React.PureComponent {
 
       let url = `/${serviceName}/${cmd}`;
       const requestOptions = { method };
+      console.log('当前API请求的 method: ', method);
       if(method === 'GET' || method === 'HEAD') {
         let paramsArray = [];
         //拼接参数
@@ -57,6 +58,9 @@ class ServiceContent extends React.PureComponent {
       } else {
         requestOptions.body = JSON.stringify(params);
       }
+      requestOptions.headers = {
+        'Content-Type': 'application/json',
+      };
       // eslint-disable-next-line no-undef
       const res = await fetch(url, requestOptions);
       let resData = null;

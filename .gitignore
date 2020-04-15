@@ -3,6 +3,7 @@ npm-debug.log
 yarn-error.log
 node_modules/
 package-lock.json
+package-local.json
 yarn.lock
 coverage/
 .idea/
