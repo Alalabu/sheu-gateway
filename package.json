@@ -1,5 +1,5 @@
 {
-  "name": "sheu-gateway",
+  "name": "docker-gateway-01",
   "version": "1.0.0",
   "description": "",
   "private": true,
@@ -81,8 +81,8 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --env=prod --daemon --title=egg-server-sheu-gateway",
-    "stop": "egg-scripts stop --title=egg-server-sheu-gateway",
+    "start": "egg-scripts start --env=prod --title=egg-server-docker-gateway-01",
+    "stop": "egg-scripts stop --title=egg-server-docker-gateway-01",
     "dev": "egg-bin dev --env=local",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",
