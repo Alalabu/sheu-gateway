@@ -42,8 +42,8 @@ class ServiceSider extends React.PureComponent {
     // 定义菜单事件
     const onItemClick = (e, opts) => {
       const sitems = store.getState().serviceItems;
-      const {serviceName, routerCMD} = opts;
-      typeof this.props.onChooseMenuitem === 'function' && this.props.onChooseMenuitem(sitems, serviceName, routerCMD);
+      const {serviceName, routerCMD, method} = opts;
+      typeof this.props.onChooseMenuitem === 'function' && this.props.onChooseMenuitem(sitems, serviceName, routerCMD, method);
     };
     // 遍历侧边菜单项
     const menuReduce = (item, key) => {
@@ -54,7 +54,7 @@ class ServiceSider extends React.PureComponent {
           >
             {routers.map((rv, rk) => { return (
               <Menu.Item key={'m'+key+'r'+rk} 
-                onClick={(e) => onItemClick(e, {serviceName:item.sname, routerCMD: rv.cmd})}>
+                onClick={(e) => onItemClick(e, {serviceName:item.sname, routerCMD: rv.cmd, method: rv.method})}>
                 {rv.name}
               </Menu.Item>
               );}) }
@@ -104,8 +104,8 @@ function mapDispatch(dispatch, ownProps) {
       dispatch(await ServicesMapAction.onRefresh())
     },
     // 侧边菜单项选中事件
-    onChooseMenuitem(serviceItems, serviceName, routerCMD) {
-      dispatch(ServicesDataAction.onChoose(serviceItems, serviceName, routerCMD))
+    onChooseMenuitem(serviceItems, serviceName, routerCMD, method) {
+      dispatch(ServicesDataAction.onChoose(serviceItems, serviceName, routerCMD, method))
     }
   }
 }

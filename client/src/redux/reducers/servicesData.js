@@ -5,9 +5,9 @@ import _ from 'lodash';
  * ServiceSiderReducer
  */
 export const ServicesDataAction = {
-  onChoose(serviceItems, serviceName, routerCMD) {
+  onChoose(serviceItems, serviceName, routerCMD, method) {
     return {
-      serviceItems, serviceName, routerCMD,
+      serviceItems, serviceName, routerCMD, method,
       type: 'choose',
     };
   },
@@ -27,7 +27,10 @@ export const ServicesDataReducer = (state = null, action) => {
       if (!subserver || !_.isArray(subserver.routers) || subserver.routers.length <= 0) {
         return state;
       }
-      const router = subserver.routers.find(si => si.cmd === action.routerCMD);
+      console.log('action.method: ', action.method);
+      const router = subserver.routers.find(si => {
+        return (si.cmd === action.routerCMD && si.method === action.method);
+      });
       if (!router || !_.isObject(router)) {
         return state;
       }

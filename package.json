@@ -12,7 +12,7 @@
     "core-js": "^3.6.4",
     "egg": "^2.15.1",
     "egg-scripts": "^2.11.0",
-    "egg-seneca-gateway": "^1.0.31",
+    "egg-seneca-gateway": "^1.0.33",
     "egg-static": "^2.2.0",
     "egg-view": "^2.1.2",
     "egg-view-assets": "^1.4.4",
