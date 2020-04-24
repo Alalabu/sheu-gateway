@@ -36,40 +36,21 @@ class HomeController extends Controller {
   async srevicesMap() {
     const { ctx } = this;
     const SENECA_ROUTERS_CACHE = 'SenecaRoutersCache';
-    console.log('[srevicesMap] In 01 ...');
+    // console.log('[srevicesMap] In 01 ...');
     try {
       const clientMap = await ctx.app.registryClient.getConfig(SENECA_ROUTERS_CACHE);
-      console.log('[srevicesMap] clientMap: ', clientMap);
+      // console.log('[srevicesMap] clientMap: ', clientMap);
       const srevicesMap = (clientMap => {
         const keys = Object.keys(clientMap.serverMap);
         return keys.map(k => clientMap.serverMap[k]);
       })(clientMap);
-      console.log('[srevicesMap] subservers: ', srevicesMap);
+      // console.log('[srevicesMap] subservers: ', srevicesMap);
       ctx.body = srevicesMap;
     } catch (error) {
       console.log('[srevicesMap] ERROR ...', error);
       ctx.body = { error };
     }
   }
-
-  // async subserverMap() {
-  //   const { ctx } = this;
-  //   const SENECA_ROUTERS_CACHE = 'SenecaRoutersCache';
-  //   console.log('[subserverMap] In 01 ...');
-  //   try {
-  //     const clientMap = await ctx.app.registryClient.getConfig(SENECA_ROUTERS_CACHE);
-  //     console.log('[subserverMap] clientMap: ', clientMap);
-  //     const subservers = (clientMap => {
-  //       const keys = Object.keys(clientMap.serverMap);
-  //       return keys.map(k => clientMap.serverMap[k]);
-  //     })(clientMap);
-  //     console.log('[subserverMap] subservers: ', subservers);
-  //     await ctx.render('submap/index.nj', { subservers });
-  //   } catch (error) {
-  //     console.log('[subserverMap] ERROR ...', error);
-  //     await ctx.render('submap/index.nj', { error });
-  //   }
-  // }
 }
 
 module.exports = HomeController;

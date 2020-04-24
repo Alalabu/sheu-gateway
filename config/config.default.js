@@ -50,6 +50,7 @@ module.exports = appInfo => {
    * egg-seneca-slot 配置
    */
   config.senecaGateway = {
+    devLog: true,
     server: {
       host: '127.0.0.1',
       port: 50005,

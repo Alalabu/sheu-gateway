@@ -1,18 +1,21 @@
 import React from 'react';
-import { Layout, PageHeader, Button, Descriptions, Input, Alert, Radio, Row, Col } from 'antd';
+import { Layout, PageHeader, Button, Descriptions, Input, Alert, Radio, Row, Col,
+  Spin,
+} from 'antd';
 import './ServiceContent.css';
 
 const { Content } = Layout;
-const { Search } = Input;
+const { Search, TextArea } = Input;
 
 import { connect } from 'react-redux';
 import store from '../../redux/store';
 
-class ServiceContent extends React.PureComponent {
+class ServiceContent extends React.Component {
 
   state = {
     testContext: 'result: ',
-    resDataType: 'json'
+    resDataType: 'json',
+    apiHeader: '{"Content-Type": "application/json", "authorization":"xxx"}',
   }
 
   constructor(props) {
@@ -33,11 +36,20 @@ class ServiceContent extends React.PureComponent {
   onAPIsUpdate() {
     const serviceData = store.getState().chooseService;
     this.setState({serviceData});
-    console.log('执行事件onAPIsUpdate...', serviceData);
   }
 
   async onTestAPI({serviceName, cmd, method, params}) {
     const {resDataType} = this.state;
+    let headers = {};
+    const apiHeader = this.state.apiHeader;
+    if (apiHeader) {
+      try {
+        headers = JSON.parse(apiHeader);
+      } catch (error) {
+        return alert('Headers 必须是有效的 JSON 格式。');
+      }
+    }
+
     try {
       method = method.toUpperCase();
       params = JSON.parse(`{${params}}`);
@@ -45,11 +57,10 @@ class ServiceContent extends React.PureComponent {
       if(resDataType === 'text') {
         params.dataType = 'text';
       }
-      
 
       let url = `/${serviceName}/${cmd}`;
       const requestOptions = { method };
-      console.log('当前API请求的 method: ', method);
+      // console.log('当前API请求的 method: ', method);
       if(method === 'GET' || method === 'HEAD') {
         let paramsArray = [];
         //拼接参数
@@ -58,21 +69,20 @@ class ServiceContent extends React.PureComponent {
       } else {
         requestOptions.body = JSON.stringify(params);
       }
-      requestOptions.headers = {
-        'Content-Type': 'application/json',
-      };
+      requestOptions.headers = headers;
+      
+      this.setState({
+        apiLoadding: true,
+      });
       // eslint-disable-next-line no-undef
       const res = await fetch(url, requestOptions);
-      let resData = null;
-      if(resDataType === 'json') {
-        resData = await res.json();
-      } else if(resDataType === 'text') {
-        resData = await res.text();
-      }
-      // const data = await res.json();
-      console.log(`========> Test API [/${serviceName}/${cmd}] => `, resData);
+      let resData = await res.text();
       this.setState({
-        testContext: JSON.stringify(resData)
+        apiLoadding: false,
+      });
+      // const resHtml = resData.indexOf('<!DOCTYPE html>') > -1;
+      this.setState({
+        testContext: resData,
       });
     } catch (e) {
       console.log('========> Test API Fetch Error => ', e);
@@ -84,7 +94,7 @@ class ServiceContent extends React.PureComponent {
   }
 
   render() {
-    const serviceData = this.state.serviceData;
+    const { serviceData } = this.state;
     if(!serviceData) return <div></div>;
     // 装载数据
     const { testContext } = this.state;
@@ -114,6 +124,13 @@ class ServiceContent extends React.PureComponent {
         >
           <Descriptions title="API测试" layout="vertical" column={1} bordered>
             <Descriptions.Item label='输入，例：{"name": "Lucy", "age": 13}'>
+              <Col flex="100px">Headers: </Col>
+              <TextArea rows={4} value={this.state.apiHeader} onChange={e => {
+                  this.setState({
+                    apiHeader: e.target.value
+                  });
+                }} />
+
               <Row style={{margin: '10px 0'}}>
                 <Col flex="100px">响应数据格式: </Col>
                 <Col flex="auto">
@@ -129,6 +146,7 @@ class ServiceContent extends React.PureComponent {
                 </Radio.Group>
                 </Col>
               </Row>
+
               <Search
                 addonBefore="Json参数: " prefix="{"  suffix="}"
                 placeholder="输入json格式参数"
@@ -137,7 +155,9 @@ class ServiceContent extends React.PureComponent {
               />
             </Descriptions.Item>
             <Descriptions.Item label="执行结果">
-              <div style={ {overflow: 'auto'} }>{testContext}</div>
+              {this.state.apiLoadding ? <Spin /> : 
+                <iframe width="100%" height="500px" frameBorder="0" seamless srcDoc={testContext}></iframe>
+              }
             </Descriptions.Item>
           </Descriptions>
         </Content>
